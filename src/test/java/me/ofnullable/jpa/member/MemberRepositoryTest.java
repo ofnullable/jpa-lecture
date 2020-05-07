@@ -1,6 +1,7 @@
 package me.ofnullable.jpa.member;
 
 import me.ofnullable.jpa.member.domain.Member;
+import me.ofnullable.jpa.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
