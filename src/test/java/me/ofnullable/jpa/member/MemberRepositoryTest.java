@@ -21,18 +21,17 @@ class MemberRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     void save_member() throws Exception {
         // given
         var member = new Member();
         member.setUsername("tester");
 
         // when
-        Long saved = memberRepository.save(member);
-        var result = memberRepository.find(saved);
+        Member saved = memberRepository.save(member);
+        var result = memberRepository.findOne(saved.getId());
 
         // then
-        assertThat(member.getId()).isEqualTo(result.getId());
+        assertThat(member).isEqualTo(saved);
         assertThat(member.getUsername()).isEqualTo(result.getUsername());
 
         assertThat(member).isEqualTo(result);
