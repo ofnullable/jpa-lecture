@@ -39,3 +39,19 @@
 - 테이블, 컬럼명 생성전략
   - SpringBoot default -> `SpringPhysicalNamingStrategy`
   - CamelCase를 snake_case로 변경해준다. (구버전은 변경X)
+
+
+## 구현 요구사항
+
+- 예제 단순화를 위해 로그인 및 권환 관리는 구현하지 않음
+- 파라미터 검증 및 예외처리는 최대한 단순하게 구현
+- 실제로 사용하는 상품은 도서만 활용
+- 카테고리 및 배송정보는 사용하지 않음
+
+## 어플리케이션 아키텍처
+
+- 계층형 구조 활용
+  - controller: web 계층
+  - service: 비즈니스 로직 ( 트랜잭션 등 )
+  - repository: JPA를 직접 사용하는 계층 ( EntityManager )
+  - domain: Entity, 모든 계층에서 사용
