@@ -1,0 +1,5 @@
+# 아무것도 설정하지 않으면 spring boot가 메모리모드로 알아서 띄운다!
+
+logging:
+  level:
+    org.hibernate.SQL: debug
