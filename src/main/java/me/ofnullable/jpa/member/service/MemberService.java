@@ -15,9 +15,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    /**
-     * 회원가입
-     */
     @Transactional
     public Member join(Member member) {
         validateDuplicateMember(member);
@@ -31,7 +28,6 @@ public class MemberService {
         }
     }
 
-    // findAll
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
