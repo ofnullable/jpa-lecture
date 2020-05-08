@@ -68,6 +68,7 @@ public class Order {
         var order = new Order();
         order.setMember(member);
         order.addOrderItems(orderItems);
+        order.setStatus(OrderStatus.ORDER);
         order.setOrderDateTime(LocalDateTime.now());
 
         var delivery = new Delivery();
