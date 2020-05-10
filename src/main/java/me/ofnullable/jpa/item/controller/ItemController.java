@@ -16,13 +16,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/items/new")
-    public String create(Model model) {
+    public String createItem(Model model) {
         model.addAttribute("form", new BookForm());
         return "items/createItemForm";
     }
 
     @PostMapping("/items/new")
-    public String create(BookForm form) {
+    public String createItem(BookForm form) {
         var book = new Book();
         book.setName(form.getName());
         book.setPrice(form.getPrice());
@@ -31,7 +31,7 @@ public class ItemController {
         book.setIsbn(form.getIsbn());
 
         itemService.saveItem(book);
-        return "redirect:/items";
+        return "redirect:/";
     }
 
     @GetMapping("/items")

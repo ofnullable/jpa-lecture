@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import me.ofnullable.jpa.order.domain.Order;
 import me.ofnullable.jpa.order.dto.OrderSearch;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +28,32 @@ public class OrderRepository {
 
     // TODO: QueryDSL
     public List<Order> searchOrder(OrderSearch orderSearch) {
-        return Collections.emptyList();
+        String jpql = "select o From Order o join o.member m";
+        boolean isFirstCondition = true;
+
+        if (orderSearch.getOrderStatus() != null) {
+            isFirstCondition = false;
+            jpql += " where o.status = :status";
+        }
+
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            if (isFirstCondition) {
+                jpql += " where";
+            } else {
+                jpql += " and";
+            }
+            jpql += " m.name like :name";
+        }
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+                .setMaxResults(1000);
+
+        if (orderSearch.getOrderStatus() != null) {
+            query = query.setParameter("status", orderSearch.getOrderStatus());
+        }
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            query = query.setParameter("name", orderSearch.getMemberName());
+        }
+        return query.getResultList();
     }
 
 }
