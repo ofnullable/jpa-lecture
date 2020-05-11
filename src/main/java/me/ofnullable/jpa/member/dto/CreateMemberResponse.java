@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CreateMember {
+public class CreateMemberResponse {
 
     private Long id;
 
-    public CreateMember(Long id) {
+    public CreateMemberResponse(Long id) {
         this.id = id;
     }
 
