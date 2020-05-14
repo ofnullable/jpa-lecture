@@ -50,21 +50,6 @@ public class InitDb {
             em.persist(order);
         }
 
-        private Book createBook(String name, int price, int stock) {
-            var book1 = new Book();
-            book1.setName(name);
-            book1.setPrice(price);
-            book1.setStock(stock);
-            return book1;
-        }
-
-        private Member createMember(String userA, String city, String street, String zipcode) {
-            var member = new Member();
-            member.setUsername(userA);
-            member.setAddress(new Address(city, street, zipcode));
-            return member;
-        }
-
         public void init2() {
             Member member = createMember("UserB", "갱기도", "부천시", "54321");
 
@@ -81,5 +66,22 @@ public class InitDb {
             var order = Order.createOrder(member, orderItem1, orderItem2);
             em.persist(order);
         }
+
+        private Member createMember(String userA, String city, String street, String zipcode) {
+            var member = new Member();
+            member.setUsername(userA);
+            member.setAddress(new Address(city, street, zipcode));
+            return member;
+        }
+
+        private Book createBook(String name, int price, int stock) {
+            var book1 = new Book();
+            book1.setName(name);
+            book1.setPrice(price);
+            book1.setStock(stock);
+            return book1;
+        }
+
     }
+
 }
