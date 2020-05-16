@@ -1,5 +1,6 @@
 package me.ofnullable.jpa.delivery.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import me.ofnullable.jpa.member.domain.Address;
@@ -15,6 +16,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY)
     private Order order;
 
