@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -27,7 +26,7 @@ public class OrderRepository {
     }
 
     // TODO: QueryDSL
-    public List<Order> searchOrder(OrderSearch orderSearch) {
+    public List<Order> searchOrders(OrderSearch orderSearch) {
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
 
@@ -54,6 +53,14 @@ public class OrderRepository {
             query = query.setParameter("name", orderSearch.getMemberName());
         }
         return query.getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .getResultList();
     }
 
 }

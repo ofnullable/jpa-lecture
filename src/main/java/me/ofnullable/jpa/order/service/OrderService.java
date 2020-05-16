@@ -6,6 +6,8 @@ import me.ofnullable.jpa.member.repository.MemberRepository;
 import me.ofnullable.jpa.order.domain.Order;
 import me.ofnullable.jpa.order.domain.OrderItem;
 import me.ofnullable.jpa.order.dto.OrderSearch;
+import me.ofnullable.jpa.order.dto.OrdersResponse;
+import me.ofnullable.jpa.order.repository.OrderQueryRepository;
 import me.ofnullable.jpa.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
 
@@ -40,11 +43,18 @@ public class OrderService {
     }
 
     public List<Order> searchOrders(OrderSearch orderSearch) {
-        return orderRepository.searchOrder(orderSearch);
+        return orderRepository.searchOrders(orderSearch);
     }
 
     public Order findOne(Long orderId) {
         return orderRepository.findOne(orderId);
     }
 
+    public List<Order> findAllWithMemberDelivery() {
+        return orderRepository.findAllWithMemberDelivery();
+    }
+
+    public List<OrdersResponse> findAllDtos() {
+        return orderQueryRepository.findAllDtos();
+    }
 }
