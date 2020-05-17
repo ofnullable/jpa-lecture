@@ -2,12 +2,14 @@ package me.ofnullable.jpa.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.ofnullable.jpa.order.domain.Order;
+import me.ofnullable.jpa.order.dto.OrderInfo;
 import me.ofnullable.jpa.order.dto.OrderSearch;
 import me.ofnullable.jpa.order.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class OrderApiController {
     private final OrderService orderService;
 
     @GetMapping("/api/v1/orders")
-    public List<Order> getOrdersWithItems() {
+    public List<Order> getOrdersV1() {
         List<Order> orders = orderService.searchOrders(new OrderSearch());
 
         orders.forEach(order -> {
@@ -26,6 +28,14 @@ public class OrderApiController {
         });
 
         return orders;
+    }
+
+    @GetMapping("/api/v2/orders")
+    public List<OrderInfo> ordersV2() {
+        List<Order> orders = orderService.searchOrders(new OrderSearch());
+        return orders.stream()
+                .map(OrderInfo::new)
+                .collect(Collectors.toList());
     }
 
 }
