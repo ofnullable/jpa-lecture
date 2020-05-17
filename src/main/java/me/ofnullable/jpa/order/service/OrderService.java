@@ -59,6 +59,11 @@ public class OrderService {
     }
 
     public List<Order> findAllWithItem() {
-        return orderRepository.findALlWithItem();
+        return orderRepository.findAllWithItem();
     }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return orderRepository.findAllWithMemberDelivery(offset, limit);
+    }
+
 }

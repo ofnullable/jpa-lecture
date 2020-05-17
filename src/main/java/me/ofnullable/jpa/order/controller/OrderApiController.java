@@ -6,6 +6,7 @@ import me.ofnullable.jpa.order.dto.OrderInfo;
 import me.ofnullable.jpa.order.dto.OrderSearch;
 import me.ofnullable.jpa.order.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -50,6 +51,20 @@ public class OrderApiController {
     @GetMapping("/api/v3/orders")
     public List<OrderInfo> ordersV3() {
         List<Order> orders = orderService.findAllWithItem();
+        return orders.stream()
+                .map(OrderInfo::new)
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Fetch join and Lazy loading
+     */
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderInfo> ordersV3_1(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "offset", defaultValue = "100") int limit
+    ) {
+        List<Order> orders = orderService.findAllWithMemberDelivery(offset, limit);
         return orders.stream()
                 .map(OrderInfo::new)
                 .collect(Collectors.toList());
