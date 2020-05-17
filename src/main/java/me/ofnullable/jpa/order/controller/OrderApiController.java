@@ -17,6 +17,9 @@ public class OrderApiController {
 
     private final OrderService orderService;
 
+    /*
+     * Lazy load and return entity
+     */
     @GetMapping("/api/v1/orders")
     public List<Order> getOrdersV1() {
         List<Order> orders = orderService.searchOrders(new OrderSearch());
@@ -30,9 +33,23 @@ public class OrderApiController {
         return orders;
     }
 
+    /*
+     * Lazy load and return dto
+     */
     @GetMapping("/api/v2/orders")
     public List<OrderInfo> ordersV2() {
         List<Order> orders = orderService.searchOrders(new OrderSearch());
+        return orders.stream()
+                .map(OrderInfo::new)
+                .collect(Collectors.toList());
+    }
+
+    /*
+     * Fetch join and return dto
+     */
+    @GetMapping("/api/v3/orders")
+    public List<OrderInfo> ordersV3() {
+        List<Order> orders = orderService.findAllWithItem();
         return orders.stream()
                 .map(OrderInfo::new)
                 .collect(Collectors.toList());

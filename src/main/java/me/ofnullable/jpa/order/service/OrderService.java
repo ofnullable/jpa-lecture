@@ -57,4 +57,8 @@ public class OrderService {
     public List<OrdersResponse> findAllDtos() {
         return orderQueryRepository.findAllDtos();
     }
+
+    public List<Order> findAllWithItem() {
+        return orderRepository.findALlWithItem();
+    }
 }
