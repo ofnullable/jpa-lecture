@@ -55,3 +55,22 @@
   - service: 비즈니스 로직 ( 트랜잭션 등 )
   - repository: JPA를 직접 사용하는 계층 ( EntityManager )
   - domain: Entity, 모든 계층에서 사용
+
+## API 개발 정리
+
+* Entity를 절대 그대로 반환하지 말고, spec에 맞게 DTO로 변환 후 반환해라
+* Lazy loading의 n+1 문제 해결
+  * `fetch join` 으로 발생하는 쿼리 수 최적화
+  * 하지만 `toMany` 관계는 `fetch join`시 pagination이 불가능함
+  * 따라서 `toOne` 관계는 `fetch join`으로, `toMany`관계는 `hibernate.default_batch_fetch_size` 옵션 또는 `@BatchSize`를 활용하여 최적화
+* DTO로 직접 조회하기
+  * `toMany`관계는 sql의 in절을 활용하여 메모리에 로딩 후 합쳐야함
+  * 또는 여러 row 그대로 조회 후 원하는 모양으로 application에서 직접 변환할 수 있음
+
+### 권장하는 최적화 순서
+* Entity를 직접 조회하는 방식으로 우선 접근
+  1. `fetch join` 으로 쿼리 수 최적화
+  2. Pagination이 필요한 경우 옵션으로 최적화 (`hibernate.default_batch_fetch_size` 또는 `@BatchSize`)
+* 이후 해결되지 않는 경우 DTO로 직접 조회
+* 그래도 안되는 경우에는 Native SQL 또는 JdbcTemplate을 활용해야함
+**그 이전에 cache등을 활요하는 방안도 생각해야하고, 코드의 복잡도와 성능 최적화 사이에 고민이 필요하다.**
