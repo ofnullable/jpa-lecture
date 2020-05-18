@@ -6,7 +6,7 @@ import me.ofnullable.jpa.member.repository.MemberRepository;
 import me.ofnullable.jpa.order.domain.Order;
 import me.ofnullable.jpa.order.domain.OrderItem;
 import me.ofnullable.jpa.order.dto.OrderSearch;
-import me.ofnullable.jpa.order.dto.OrdersResponse;
+import me.ofnullable.jpa.order.repository.dto.OrderSimpleQueryDto;
 import me.ofnullable.jpa.order.repository.OrderQueryRepository;
 import me.ofnullable.jpa.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,7 @@ public class OrderService {
         return orderRepository.findAllWithMemberDelivery();
     }
 
-    public List<OrdersResponse> findAllDtos() {
+    public List<OrderSimpleQueryDto> findAllDtos() {
         return orderQueryRepository.findAllDtos();
     }
 

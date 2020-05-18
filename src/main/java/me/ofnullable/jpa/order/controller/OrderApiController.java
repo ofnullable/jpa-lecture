@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import me.ofnullable.jpa.order.domain.Order;
 import me.ofnullable.jpa.order.dto.OrderInfo;
 import me.ofnullable.jpa.order.dto.OrderSearch;
+import me.ofnullable.jpa.order.repository.OrderQueryRepository;
+import me.ofnullable.jpa.order.repository.dto.OrderQueryDto;
 import me.ofnullable.jpa.order.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderService orderService;
+    private final OrderQueryRepository orderQueryRepository;
 
     /*
      * Lazy load and return entity
@@ -68,6 +71,14 @@ public class OrderApiController {
         return orders.stream()
                 .map(OrderInfo::new)
                 .collect(Collectors.toList());
+    }
+
+    /*
+     * Lazy(?) load and return dto
+     */
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> ordersV4() {
+        return orderQueryRepository.findOrderQueryDtos();
     }
 
 }

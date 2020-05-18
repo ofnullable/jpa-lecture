@@ -1,4 +1,4 @@
-package me.ofnullable.jpa.order.dto;
+package me.ofnullable.jpa.order.repository.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import me.ofnullable.jpa.order.domain.OrderStatus;
 import java.time.LocalDateTime;
 
 @Getter @Setter
-public class OrdersResponse {
+public class OrderSimpleQueryDto {
 
     private Long orderId;
     private OrderStatus orderStatus;
@@ -17,7 +17,7 @@ public class OrdersResponse {
     private String username;
     private Address address;
 
-    public OrdersResponse(Long orderId, OrderStatus orderStatus, LocalDateTime orderDateTime, String username, Address address) {
+    public OrderSimpleQueryDto(Long orderId, OrderStatus orderStatus, LocalDateTime orderDateTime, String username, Address address) {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.orderDateTime = orderDateTime;
@@ -25,7 +25,7 @@ public class OrdersResponse {
         this.address = address;
     }
 
-    public OrdersResponse(Order order) {
+    public OrderSimpleQueryDto(Order order) {
         this.orderId = order.getId();
         this.orderStatus = order.getStatus();
         this.orderDateTime = order.getOrderDateTime();
