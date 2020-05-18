@@ -81,4 +81,12 @@ public class OrderApiController {
         return orderQueryRepository.findOrderQueryDtos();
     }
 
+    /*
+     * Lazy(?) load with `in` query and return dto
+     */
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() {
+        return orderQueryRepository.findAllByDtos();
+    }
+
 }
