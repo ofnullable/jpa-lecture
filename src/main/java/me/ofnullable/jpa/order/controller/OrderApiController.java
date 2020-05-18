@@ -5,6 +5,8 @@ import me.ofnullable.jpa.order.domain.Order;
 import me.ofnullable.jpa.order.dto.OrderInfo;
 import me.ofnullable.jpa.order.dto.OrderSearch;
 import me.ofnullable.jpa.order.repository.OrderQueryRepository;
+import me.ofnullable.jpa.order.repository.dto.OrderFlatDto;
+import me.ofnullable.jpa.order.repository.dto.OrderItemQueryDto;
 import me.ofnullable.jpa.order.repository.dto.OrderQueryDto;
 import me.ofnullable.jpa.order.service.OrderService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -87,6 +91,22 @@ public class OrderApiController {
     @GetMapping("/api/v5/orders")
     public List<OrderQueryDto> ordersV5() {
         return orderQueryRepository.findAllByDtos();
+    }
+
+    /*
+     * Return dto by only one query!
+     */
+    @GetMapping("/api/v6/orders")
+    public List<OrderQueryDto> ordersV6() {
+        List<OrderFlatDto> flats = orderQueryRepository.findAllByDtos_flat();
+
+        return flats.stream()
+                .collect(groupingBy(o -> new OrderQueryDto(o.getOrderId(), o.getUsername(), o.getOrderDateTime(), o.getOrderStatus(), o.getAddress()),
+                        mapping(o -> new OrderItemQueryDto(o.getOrderId(), o.getItemName(), o.getOrderPrice(), o.getCount()), toList())
+                ))
+                .entrySet().stream()
+                .map(e -> new OrderQueryDto(e.getKey().getOrderId(), e.getKey().getUsername(), e.getKey().getOrderDateTime(), e.getKey().getOrderStatus(), e.getKey().getAddress(), e.getValue()))
+                .collect(toList());
     }
 
 }

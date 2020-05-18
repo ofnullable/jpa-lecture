@@ -1,6 +1,7 @@
 package me.ofnullable.jpa.order.repository;
 
 import lombok.RequiredArgsConstructor;
+import me.ofnullable.jpa.order.repository.dto.OrderFlatDto;
 import me.ofnullable.jpa.order.repository.dto.OrderItemQueryDto;
 import me.ofnullable.jpa.order.repository.dto.OrderQueryDto;
 import me.ofnullable.jpa.order.repository.dto.OrderSimpleQueryDto;
@@ -50,6 +51,17 @@ public class OrderQueryRepository {
         return orders;
     }
 
+    public List<OrderFlatDto> findAllByDtos_flat() {
+        return em.createQuery(
+                "select new me.ofnullable.jpa.order.repository.dto.OrderFlatDto(o.id, m.username, o.orderDateTime, o.status, d.address, i.name, oi.price, oi.count)" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class)
+                .getResultList();
+    }
+
     private List<OrderQueryDto> findOrders() {
         return em.createQuery(
                 "select new me.ofnullable.jpa.order.repository.dto.OrderQueryDto(o.id, m.username, o.orderDateTime, o.status, d.address)" +
@@ -87,5 +99,4 @@ public class OrderQueryRepository {
         return orderItems.stream()
                 .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
     }
-
 }

@@ -1,5 +1,6 @@
 package me.ofnullable.jpa.order.repository.dto;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import me.ofnullable.jpa.member.domain.Address;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter @Setter
+@EqualsAndHashCode(of = "orderId")
 public class OrderQueryDto {
 
     private Long orderId;
@@ -24,6 +26,15 @@ public class OrderQueryDto {
         this.orderDateTime = orderDateTime;
         this.orderStatus = orderStatus;
         this.address = address;
+    }
+
+    public OrderQueryDto(Long orderId, String username, LocalDateTime orderDateTime, OrderStatus orderStatus, Address address, List<OrderItemQueryDto> orderItems) {
+        this.orderId = orderId;
+        this.username = username;
+        this.orderDateTime = orderDateTime;
+        this.orderStatus = orderStatus;
+        this.address = address;
+        this.orderItems = orderItems;
     }
 
 }
