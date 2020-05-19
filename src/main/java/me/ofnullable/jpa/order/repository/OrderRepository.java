@@ -1,7 +1,11 @@
 package me.ofnullable.jpa.order.repository;
 
-import lombok.RequiredArgsConstructor;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import me.ofnullable.jpa.member.domain.QMember;
 import me.ofnullable.jpa.order.domain.Order;
+import me.ofnullable.jpa.order.domain.OrderStatus;
+import me.ofnullable.jpa.order.domain.QOrder;
 import me.ofnullable.jpa.order.dto.OrderSearch;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -11,10 +15,15 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class OrderRepository {
 
     private final EntityManager em;
+    private final JPAQueryFactory query;
+
+    public OrderRepository(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
     public Order save(Order order) {
         em.persist(order);
@@ -25,8 +34,37 @@ public class OrderRepository {
         return em.find(Order.class, orderId);
     }
 
-    // TODO: QueryDSL
     public List<Order> searchOrders(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(
+                        statusEq(orderSearch.getOrderStatus()),
+                        usernameLike(orderSearch.getMemberName())
+                )
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression statusEq(OrderStatus orderStatus) {
+        if (orderStatus == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(orderStatus);
+    }
+
+    private BooleanExpression usernameLike(String username) {
+        if (!StringUtils.hasText(username)) {
+            return null;
+        }
+        return QMember.member.username.like(username);
+    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
 
